@@ -26,20 +26,20 @@ export default clerkMiddleware(async (auth, req) => {
     
     const pathname = req.nextUrl.pathname
     
-    // Debug logging
-    console.log('User ID:', userId)
-    console.log('Session Claims:', JSON.stringify(sessionClaims, null, 2))
-    console.log('Detected Role:', role)
-    console.log('Pathname:', pathname)
+    // // Debug logging
+    // console.log('User ID:', userId)
+    // console.log('Session Claims:', JSON.stringify(sessionClaims, null, 2))
+    // console.log('Detected Role:', role)
+    // console.log('Pathname:', pathname)
 
     // Role-based home page redirects
     if (pathname === '/') {
       if (role === 'admin') {
-        console.log('Redirecting admin to /admin')
+        // console.log('Redirecting admin to /admin')
         return NextResponse.redirect(new URL('/admin', req.url))
       }
       if (role === 'teacher') {
-        console.log('Redirecting teacher to /teacher')
+        // console.log('Redirecting teacher to /teacher')
         return NextResponse.redirect(new URL('/teacher', req.url))
       }
       console.log('User staying on home page')
