@@ -2,7 +2,10 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    authorId: {
+      type: String,
+    },
+    authorName: {
       type: String,
       required: true,
       trim: true,
@@ -12,12 +15,7 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       unique: true,
-      lowercase: true
-    },
-    password: {
-      type: String,
-      required: true,
-      trim: true,
+      lowercase: true,
     },
     role: {
       type: String,
@@ -32,5 +30,3 @@ const userSchema = new mongoose.Schema(
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
-
-
