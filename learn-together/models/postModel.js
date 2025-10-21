@@ -1,50 +1,63 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose'
 
-const postSchema = new mongoose.Schema(
-  {
-    authorId: {
-      type: String,
-      required: false,
-    },
-    courseTitle: {
-      type: String,
-      required: true,
-    },
-    courseDescription: {
-      type: String,
-      required: true,
-    },
-    media: [
-      {
-        id: { type: String },
-        type: { type: String, enum: ["image", "video", "pdf"] }, // ✅ fixed enum syntax
-        url: { type: String },
-        thumbnailUrl: { type: String },
-        size: { type: Number },
-      },
-    ],
-    visibility: {
-      type: String,
-      enum: ["public", "private"],
-      default: "public",
-    },
-    likesCount: {
-      type: Number,
-      default: 0, // ✅ best practice: give default values
-    },
-    commentsCount: {
-      type: Number,
-      default: 0,
-    },
-    sharesCount: {
-      type: Number,
-      default: 0,
-    },
+const mediaSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    required: true
   },
-  { timestamps: true } // ✅ adds createdAt and updatedAt automatically
-);
+  type: {
+    type: String,
+    enum: ['image', 'video', 'pdf'],
+    required: true
+  },
+  url: {
+    type: String,
+    required: true
+  },
+  thumbnailUrl: {
+    type: String
+  },
+  size: {
+    type: Number,
+    default: 0
+  }
+})
 
-// ✅ Correct model initialization
-const Posts = mongoose.models.Posts || mongoose.model("Posts", postSchema);
+const postSchema = new mongoose.Schema({
+  courseTitle: {
+    type: String,
+    required: true,
+    trim: true,
+    maxLength: 100
+  },
+  courseDescription: {
+    type: String,
+    required: true,
+    trim: true,
+    maxLength: 2000
+  },
+  authorId: {
+    type: String,
+    required: true
+  },
+  media: [mediaSchema],
+  visibility: {
+    type: String,
+    enum: ['public', 'private'],
+    default: 'public'
+  },
+  likes: {
+    type: Number,
+    default: 0
+  },
+  comments: [{
+    userId: String,
+    text: String,
+    createdAt: { type: Date, default: Date.now }
+  }]
+}, {
+  timestamps: true
+})
 
-export default Posts;
+const Post = mongoose.models.Post || mongoose.model('Post', postSchema)
+export default Post
