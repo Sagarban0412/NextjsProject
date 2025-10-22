@@ -13,7 +13,9 @@ export async function POST(req) {
     }
 
     const body = await req.json()
-    const { courseTitle, courseDescription, media, visibility = 'public' } = body
+    const { courseTitle, courseDescription, media, visibility = 'public', imgUrl, authorName } = body
+    
+    // console.log('Received payload:', body)
 
     if (!courseTitle || !courseDescription) {
       return NextResponse.json({ 
@@ -26,6 +28,8 @@ export async function POST(req) {
       courseTitle,
       courseDescription,
       authorId: userId,
+      imgUrl: imgUrl || null,
+      authorName: authorName || 'Unknown',
       media: media || [],
       visibility,
       createdAt: new Date(),

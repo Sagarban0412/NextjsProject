@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required").max(100, "Title too long"),
@@ -34,6 +35,10 @@ export default function Page() {
       file: undefined,
     },
   });
+
+  const { user, isLoaded } = useUser();
+  console.log('User loaded:', isLoaded, 'User img:', user?.imageUrl);
+  
 
   const [uploadProgress, setUploadProgress] = useState(0); // 0..100
   const [uploading, setUploading] = useState(false);
@@ -108,6 +113,12 @@ export default function Page() {
 
     // client-side guard (zod ensures required fields)
     if (!title || !description) return;
+    
+    // Wait for user to be loaded
+    if (!isLoaded || !user) {
+      alert('Please wait for user data to load');
+      return;
+    }
 
     setUploading(true);
     setUploadProgress(0);
@@ -126,10 +137,14 @@ export default function Page() {
       const payload = {
         courseTitle: title,
         courseDescription: description,
-        authorId: null, // set it if you have auth
+        authorId: user.id,
+        imgUrl: user?.imageUrl || null,
+        authorName: user?.firstName || 'Unknown',
         media: mediaArray,
         visibility: "public",
       };
+      
+      console.log('Payload being sent:', payload);
 
       const res = await axios.post("/api/posts/create", payload, {
         headers: {
@@ -142,7 +157,6 @@ export default function Page() {
 
       toast.success(`Post created! ${json.id}`);
       form.reset();
-      setPreviewUrl(null);
       setUploadProgress(0);
     } catch (err) {
       console.error(err);

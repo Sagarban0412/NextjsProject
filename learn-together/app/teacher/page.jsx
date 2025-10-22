@@ -1,4 +1,3 @@
-
 import QuickActions from "@/components/QuickActions";
 import { requireRole } from "@/lib/auth";
 import { currentUser } from "@clerk/nextjs/server";
@@ -7,7 +6,6 @@ import { currentUser } from "@clerk/nextjs/server";
 export default async function TeacherDashboard() {
   await requireRole("teacher");
   const user = await currentUser();
-
   return (
     <>
       <div className="max-w-6xl mx-auto mt-8 p-6">
