@@ -12,8 +12,6 @@ import { Button } from "./ui/button";
 
 const Header = () => {
     const { user } = useUser();
-    console.log(user?.id);
-    
   return (
     <header className="shadow-lg">
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-10 py-3 sm:py-5">

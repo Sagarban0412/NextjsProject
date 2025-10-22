@@ -4,6 +4,8 @@ import Link from "next/link";
 import Header from "@/components/Header";
 import Footer from '@/components/Footer'
 import FeatureCard from "@/components/FeatureCard";
+import PostCard from "@/components/PostCard";
+import Feed from "@/components/Feed";
 const page = () => {
   const features = [
     {
@@ -81,19 +83,7 @@ const page = () => {
         </div>
       </section>
 
-      {/* Content Feed Section */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Latest Learning Content
-            </h2>
-            <p className="text-gray-600">
-              Discover new courses, resources, and updates from our community
-            </p>
-          </div>
-        </div>
-      </section>
+      <Feed/>
 
       {/* Stats Section */}
       <section className="py-20 bg-gray-100">
