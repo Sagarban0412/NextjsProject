@@ -1,4 +1,15 @@
-import { Calendar, Home, Inbox, Search, Settings, User, Users } from "lucide-react"
+"use client"
+import {
+  Calendar,
+  Cross,
+  Home,
+  Inbox,
+  Search,
+  Settings,
+  User,
+  Users,
+  X,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -9,8 +20,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
-import Link from "next/link"
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -34,15 +46,20 @@ const items = [
     url: "#",
     icon: Settings,
   },
-]
+];
 
 export function TeacherSidebar() {
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className={'text-2xl h-[75px]'}>Dashboard</SidebarGroupLabel>
-          <SidebarGroupContent className={'mt-5 '}>
+          <div className="flex items-center justify-center">
+            <SidebarGroupLabel className={"text-2xl h-[75px] flex-1"}>
+              Dashboard
+            </SidebarGroupLabel>
+            <SidebarTrigger className="flex-0" />
+          </div>
+          <SidebarGroupContent className={"mt-5 "}>
             <SidebarMenu>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
@@ -59,5 +76,5 @@ export function TeacherSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }

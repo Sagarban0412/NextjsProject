@@ -11,9 +11,12 @@ export default function AdminLayout({ children }) {
   return (
     <>
       <SidebarProvider>
-        <TeacherSidebar />
+        <div className="flex">
+          <TeacherSidebar />
+        </div>
         <main className="w-full">
           <TeacherHeader />
+          <SidebarTrigger/>
           {children}
         </main>
       </SidebarProvider>
