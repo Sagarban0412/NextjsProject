@@ -34,9 +34,9 @@ const Feed = () => {
             </p>
           </div>
         </div>
-        <div className="max-w-7xl mx-[500px] flex flex-col gap-5">
+        <div className="max-w-full flex flex-col items-center justify-center gap-5">
           {posts.map((post, index) => (
-            <div key={index}>
+            <div key={index} className="min-w-[300px] flex flex-col items-center justify-center ">
                 <PostCard title={post.courseTitle} description={post.courseDescription} authorName={post.authorName} userProfile={post.imgUrl} media={post.media}/>
                 <hr className="mt-10" />
             </div>

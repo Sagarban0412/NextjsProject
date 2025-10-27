@@ -1,29 +1,32 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import Header from "@/components/Header";
-import Footer from '@/components/Footer'
+import Footer from "@/components/Footer";
 import FeatureCard from "@/components/FeatureCard";
 import PostCard from "@/components/PostCard";
 import Feed from "@/components/Feed";
+import CountUp from "@/components/CountUp";
 const page = () => {
   const features = [
     {
-    icon:"👥",
-    title:"Interactive Learning",
-    description:"Connect with teachers and students in real-time"
+      icon: "👥",
+      title: "Interactive Learning",
+      description: "Connect with teachers and students in real-time",
     },
     {
-    icon:"📈",
-    title:"Track Progress",
-    description:"Monitor your learning journey with detailed analytics"
+      icon: "📈",
+      title: "Track Progress",
+      description: "Monitor your learning journey with detailed analytics",
     },
     {
-    icon:"📚",
-    title:"Rich Course Content",
-    description:" Access comprehensive courses across multiple subjects"
+      icon: "📚",
+      title: "Rich Course Content",
+      description: " Access comprehensive courses across multiple subjects",
     },
-]
+  ];
   return (
     <>
       <Header />
@@ -72,37 +75,76 @@ const page = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {
-              features.map((item,index)=>(
-                 <div key={index}>
-                  <FeatureCard key={index} icon={item.icon} title={item.title} description={item.description} />
-                 </div>
-              ))
-            }
+            {features.map((item, index) => (
+              <div key={index}>
+                <FeatureCard
+                  key={index}
+                  icon={item.icon}
+                  title={item.title}
+                  description={item.description}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      <Feed/>
+      <Feed />
 
       {/* Stats Section */}
       <section className="py-20 bg-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
             <div>
-              <div className="text-4xl font-bold text-blue-600 mb-2">10K+</div>
+              <div className="text-4xl font-bold text-blue-600 mb-2">
+                <CountUp
+                  from={0}
+                  to={70}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+              </div>
               <div className="text-gray-600">Active Students</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-green-600 mb-2">500+</div>
+              <div className="text-4xl font-bold text-green-600 mb-2">
+                <CountUp
+                  from={0}
+                  to={15}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+              </div>
               <div className="text-gray-600">Expert Teachers</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-purple-600 mb-2">1K+</div>
+              <div className="text-4xl font-bold text-purple-600 mb-2">
+                <CountUp
+                  from={0}
+                  to={50}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />
+              </div>
               <div className="text-gray-600">Courses Available</div>
             </div>
             <div>
-              <div className="text-4xl font-bold text-indigo-600 mb-2">95%</div>
+              <div className="text-4xl font-bold text-indigo-600 mb-2">
+                <CountUp
+                  from={0}
+                  to={90}
+                  separator=","
+                  direction="up"
+                  duration={1}
+                  className="count-up-text"
+                />%
+              </div>
               <div className="text-gray-600">Success Rate</div>
             </div>
           </div>
@@ -129,7 +171,7 @@ const page = () => {
         </div>
       </section>
 
-      <Footer/>
+      <Footer />
     </>
   );
 };
