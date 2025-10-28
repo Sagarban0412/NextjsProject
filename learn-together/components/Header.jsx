@@ -1,17 +1,15 @@
-"use client"
+"use client";
 
 import React from "react";
-import {
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { Menu } from "lucide-react";
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 
 const Header = () => {
-    const { user } = useUser();
+  const { user } = useUser();
   return (
     <header className="shadow-lg">
       <div className="flex justify-between items-center px-4 sm:px-6 lg:px-10 py-3 sm:py-5">
@@ -80,22 +78,70 @@ const Header = () => {
         </div>
 
         {/* Auth Buttons */}
-        <div className="flex items-center gap-2 sm:gap-4">
+        <div className="hidden md:flex items-center gap-2 sm:gap-4">
           <SignedOut>
-              <Button asChild variant="secondary">
-                <Link href={`/login`}>Login</Link>
-              </Button>
-              <Button asChild>
-                <Link href={`/signup`}>Signup</Link>
-              </Button>
+            <Button asChild variant="secondary">
+              <Link href={`/login`}>Login</Link>
+            </Button>
+            <Button asChild>
+              <Link href={`/signup`}>Signup</Link>
+            </Button>
           </SignedOut>
           <SignedIn>
             <div className="flex items-center space-x-3">
               <p className="text-gray-700">Hi, {user?.firstName}</p>
-              <UserButton/>
+              <UserButton />
             </div>
           </SignedIn>
         </div>
+
+        <Dialog>
+          <DialogTrigger>
+            <Menu className="md:hidden" />
+          </DialogTrigger>
+          <DialogContent>
+            <DialogTitle>Navigation</DialogTitle>
+            <nav className="flex flex-col gap-5">
+              <Link
+                href="/courses"
+                className="h-5 rounded-xl text-sm hover:bg-gray-400"
+              >
+                Courses
+              </Link>
+              <Link
+                href="/about"
+                className="h-5 rounded-xl text-sm hover:bg-gray-400"
+              >
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="h-5 rounded-xl text-sm hover:bg-gray-400"
+              >
+                Contact
+              </Link>
+              <SignedIn>
+                <Link
+                  href="/profile"
+                  className="h-5 rounded-xl text-sm hover:bg-gray-400"
+                >
+                  Profile
+                </Link>
+              </SignedIn>
+              <SignedOut>
+                <div className="w-full flex">
+                  <Button asChild className={'flex-1'}>
+                    <Link href="/signup">Signup</Link>
+                  </Button>
+
+                  <Button asChild className={'flex-1'} variant="secondary">
+                    <Link href="/login">Login</Link>
+                  </Button>
+                </div>
+              </SignedOut>
+            </nav>
+          </DialogContent>
+        </Dialog>
       </div>
     </header>
   );
