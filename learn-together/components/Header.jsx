@@ -11,8 +11,8 @@ import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "./ui/dialog";
 const Header = () => {
   const { user } = useUser();
   return (
-    <header className="shadow-lg">
-      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-10 py-3 sm:py-5">
+    <header className="shadow-lg ">
+      <div className="flex justify-between items-center px-4 sm:px-6 lg:px-8 lg:mx-24 py-3 sm:py-5">
         {/* Logo */}
         <div className="flex items-center space-x-2">
           <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
@@ -53,46 +53,48 @@ const Header = () => {
           </SignedIn>
         </nav>
 
-        {/* Search Bar - Hidden on small screens */}
-        <div className="hidden lg:flex items-center">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search courses..."
-              className="w-64 px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
-            />
-            <svg
-              className="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+        <div className="flex gap-10">
+          {/* Search Bar - Hidden on small screens */}
+          <div className="hidden lg:flex items-center">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search courses..."
+                className="w-64 px-4 py-2 pl-10 pr-4 text-sm border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white/80 backdrop-blur-sm"
               />
-            </svg>
-          </div>
-        </div>
-
-        {/* Auth Buttons */}
-        <div className="hidden md:flex items-center gap-2 sm:gap-4">
-          <SignedOut>
-            <Button asChild variant="secondary">
-              <Link href={`/login`}>Login</Link>
-            </Button>
-            <Button asChild>
-              <Link href={`/signup`}>Signup</Link>
-            </Button>
-          </SignedOut>
-          <SignedIn>
-            <div className="flex items-center space-x-3">
-              <p className="text-gray-700">Hi, {user?.firstName}</p>
-              <UserButton />
+              <svg
+                className="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
             </div>
-          </SignedIn>
+          </div>
+
+          {/* Auth Buttons */}
+          <div className="hidden md:flex items-center gap-2 sm:gap-4">
+            <SignedOut>
+              <Button asChild variant="secondary">
+                <Link href={`/login`}>Login</Link>
+              </Button>
+              <Button asChild>
+                <Link href={`/signup`}>Signup</Link>
+              </Button>
+            </SignedOut>
+            <SignedIn>
+              <div className="flex items-center space-x-3">
+                <p className="text-gray-700">Hi, {user?.firstName}</p>
+                <UserButton />
+              </div>
+            </SignedIn>
+          </div>
         </div>
 
         <Dialog>
@@ -130,11 +132,11 @@ const Header = () => {
               </SignedIn>
               <SignedOut>
                 <div className="w-full flex">
-                  <Button asChild className={'flex-1'}>
+                  <Button asChild className={"flex-1"}>
                     <Link href="/signup">Signup</Link>
                   </Button>
 
-                  <Button asChild className={'flex-1'} variant="secondary">
+                  <Button asChild className={"flex-1"} variant="secondary">
                     <Link href="/login">Login</Link>
                   </Button>
                 </div>
