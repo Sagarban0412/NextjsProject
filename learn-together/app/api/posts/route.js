@@ -8,14 +8,15 @@ export async function GET() {
 
     const posts = await Post.find().sort({ createdAt: -1 }); // optional: newest first
 
-    return NextResponse.json(
-      { success: true, posts },
-      { status: 200 }
-    );
+    return NextResponse.json({ success: true, posts }, { status: 200 });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return NextResponse.json(
-      { success: false, message: "Failed to fetch posts", error: error.message },
+      {
+        success: false,
+        message: "Failed to fetch posts",
+        error: error.message,
+      },
       { status: 500 }
     );
   }

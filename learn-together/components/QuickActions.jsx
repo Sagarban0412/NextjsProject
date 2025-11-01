@@ -21,9 +21,9 @@ const QuickActions = () => {
           <Eye size={30} />
           <h2 className="text-sm md:text-lg">View Report</h2>
         </div>
-        <div className="flex gap-5 mt-5 items-center mx-2 md:mx-10 px-3 md:px-10 h-13 rounded-xl shadow-sm border-2 cursor-pointer hover:bg-gray-200">
+        <div className="flex gap-5 mt-5 items-center mx-2 md:mx-10 px-3 md:px-10 h-13 rounded-xl shadow-sm border-2 cursor-pointer hover:bg-gray-200" onClick={()=>router.push('/teacher/manage/posts')} >
           <SquareKanban size={30} />
-          <h2 className="text-sm md:text-lg">Manage Student</h2>
+          <h2 className="text-sm md:text-lg">Manage Post</h2>
         </div>
       </div>
     </>
