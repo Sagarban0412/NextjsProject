@@ -214,7 +214,7 @@ export default function Page() {
                 name="file"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Media (PDF, Video, Image)</FormLabel>
+                    <FormLabel>Media (Pdf, Video, Image)</FormLabel>
                     <FormControl>
                       <Input
                         type="file"
