@@ -38,7 +38,12 @@ const Login = () => {
     setIsLoading(true);
     try {
       const res = await axios.post("/api/auth", data);
+      const role = res.data.user?.role
       toast.success("Login successful!");
+      if(role==="admin"){
+        router.push("/admin");
+        return;
+      }
       router.push("/waiter");
     } catch (error) {
       const errorMessage = error.response?.data?.error || "Login failed";

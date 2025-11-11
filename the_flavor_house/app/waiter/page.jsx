@@ -1,9 +1,19 @@
-import React from 'react'
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { jwtDecode } from 'jwt-decode';
 
-const page = () => {
+export default async function Page() {
+  const cookieStore  = await cookies()
+  const token = cookieStore.get('token')?.value;
+  const user = token?jwtDecode(token):null;
+
+  // If no token, redirect to login
+  if (!token) {
+    redirect('/');
+  }
+  // If token exists, show waiter page
   return (
-    <div>This is waiter page</div>
-  )
-}
 
-export default page
+    <h1>waiter page</h1>
+  );
+}
