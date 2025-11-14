@@ -1,4 +1,4 @@
-import { loginUser } from "@/app/controllers/userController";
+import { loginUser } from "@/app/controllers/authController";
 import connectDB from "@/app/libs/db";
 import User from "@/app/models/userModel";
 import { NextResponse } from "next/server";
