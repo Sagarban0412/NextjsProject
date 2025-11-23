@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Search } from "lucide-react";
+import AllTables from "@/components/AllTables";
 
 const WaiterFilterBar = () => {
   const filter = [
@@ -22,7 +23,7 @@ const WaiterFilterBar = () => {
       color: "text-yellow-600",
     },
     {
-      name: "Needs Cleaning",
+      name: "Needs_Cleaning",
       color: "text-blue-800",
     },
   ];
@@ -31,8 +32,19 @@ const WaiterFilterBar = () => {
 
   return (
     <>
-      <div className="flex justify-between gap-4">
-        <form className="relative w-[500px] flex-1">
+      <div className="flex justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Table OverView</h1>
+          <p className="font-light text-sm text-gray-100">
+            Real-time Status of all Resturant Table
+          </p>
+        </div>
+        <button className="bg-gray-500 px-4  rounded-xl border cursor-pointer font-bold">
+          Add Party
+        </button>
+      </div>
+      <div className="flex flex-col lg:flex-row justify-between gap-4 mt-10 ">
+        <form className="relative max-w-auto flex-1">
           <Search className="absolute top-1/2 -translate-y-1/2 left-3 text-white" />
           <input
             type="search"
@@ -40,9 +52,13 @@ const WaiterFilterBar = () => {
             className="w-full bg-gray-600 p-1 pl-10 rounded-xl text-white placeholder-gray-300 outline-none"
           />
         </form>
-        <div className="flex gap-5">
+        <div className="flex gap-5 overflow-auto scroll-hide">
           {filter.map((items, index) => (
-            <div onClick={() => setIsActive(items.name)} key={index}>
+            <div
+              onClick={() => setIsActive(items.name)}
+              key={index}
+              className=""
+            >
               <button
                 className={`px-4 py-2 rounded-xl font-bold cursor-pointer ${
                   isActive === items.name
@@ -55,6 +71,9 @@ const WaiterFilterBar = () => {
             </div>
           ))}
         </div>
+      </div>
+      <div className="px-20 py-5">
+        <AllTables status={isActive} />
       </div>
     </>
   );

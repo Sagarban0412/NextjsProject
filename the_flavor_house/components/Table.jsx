@@ -7,7 +7,7 @@ const Table = ({ name, src, status }) => {
         <img
           src={src}
           alt="table1"
-          className="w-[300px] h-[200px] object-cover rounded-2xl"
+          className="w-[300px] h-[200px] object-cover rounded-2xl" 
         />
         <span
           className={`absolute top-0 right-0 rounded-sm px-2  bg-black/30 ${

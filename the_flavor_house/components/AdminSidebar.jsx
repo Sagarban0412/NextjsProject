@@ -7,14 +7,16 @@ import {
   Receipt,
   Settings,
   SettingsIcon,
+  ShoppingBag,
   SquareMenu,
+  User,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
-const WaiterSidebar = () => {
+const AdminSidebar = () => {
   const [isActive, setIsActive] = useState("Dashboard");
-  const base = "/waiter";
+  const base = "/admin";
   const menu = [
     {
       name: "Dashboard",
@@ -22,14 +24,24 @@ const WaiterSidebar = () => {
       href: `${base}`,
     },
     {
-      name: "Orders",
-      icon: <Receipt />,
-      href: `${base}/orders`,
+      name: "Menu Management",
+      icon: <SquareMenu />,
+      href: `${base}/menu`,
+    },
+    {
+      name: "Staff Management",
+      icon: <User />,
+      href: `${base}/staff`,
     },
     {
       name: "Analytics",
       icon: <ChartNoAxesColumn />,
       href: `${base}/analytics`,
+    },
+    {
+      name: "Inventory",
+      icon: <ShoppingBag />,
+      href: `${base}/inventory`,
     },
     {
       name: "Settings",
@@ -44,8 +56,8 @@ const WaiterSidebar = () => {
           <div className="flex gap-3 items-center">
             <img src="/images/avatar.png" className="w-10 h-10 rounded-full" alt="avatar" />
             <div>
-              <h1 className="font-semibold text-lg">John Doe</h1>
-              <p className="text-sm font-light text-gray-300">Waiter</p>
+              <h1 className="font-semibold text-lg">Sagar Ban</h1>
+              <p className="text-sm font-light text-gray-300">Admin</p>
             </div>
           </div>
           <div className="mt-5">
@@ -77,4 +89,4 @@ const WaiterSidebar = () => {
   );
 };
 
-export default WaiterSidebar;
+export default AdminSidebar;

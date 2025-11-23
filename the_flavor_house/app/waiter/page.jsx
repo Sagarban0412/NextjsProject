@@ -4,7 +4,6 @@ import { jwtDecode } from "jwt-decode";
 import WaiterFilterBar from "@/components/WaiterFilterBar";
 import AllTables from "@/components/AllTables";
 
-
 export default async function Page() {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;
@@ -14,16 +13,10 @@ export default async function Page() {
   if (!token) {
     redirect("/");
   }
-  
-  return (
 
+  return (
     <>
-      <div className="py-8">
-        <WaiterFilterBar/>
-        <div className="px-20 py-5">
-          <AllTables />
-        </div>
-      </div>
+      <WaiterFilterBar />
     </>
   );
 }
