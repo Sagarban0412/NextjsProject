@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Plus, Search, Settings, Trash } from "lucide-react";
+import { Cross, Pencil, Plus, Search, Settings, Trash, X } from "lucide-react";
 import React, { useState } from "react";
 import {
   Table,
@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
+import CreateMenuItems from "@/components/CreateMenuItems";
 
 const page = () => {
   const categories = [
@@ -24,9 +25,41 @@ const page = () => {
     "Drinks",
   ];
 
+  const itemsInfo = [
+    {
+      name: "Pizza",
+      src: "/images/login-bg.jpg",
+      category: "Main Course",
+      price: "$10",
+    },
+    {
+      name: "Burger",
+      src: "/images/table1.jpg",
+      category: "Main Course",
+      price: "$12",
+    },
+    {
+      name: "Mojito",
+      src: "/images/avatar.png",
+      category: "Beverages",
+      price: "$5",
+    },
+  ];
+
+  const [available, setAvailable] = useState(true);
   const [isOpen, setIsOpen] = useState("All Items");
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSwitch = (ItemName) => {
+    setAvailable(!available);
+    console.log(ItemName);
+  };
+
+  const handleAddMenu = () => {
+    setShowModal(true);
+  };
   return (
-    <>
+    <div className="relative">
       <div className="w-auto  flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold">Menu Management</h1>
@@ -34,7 +67,10 @@ const page = () => {
             Create or Manage a new Menu for your hotel
           </p>
         </div>
-        <div className="flex justify-center items-center gap-3 cursor-pointer px-4 h-10 rounded-xl bg-blue-700 ">
+        <div
+          className="flex justify-center items-center gap-3 cursor-pointer px-4 h-10 rounded-xl bg-blue-700"
+          onClick={handleAddMenu}
+        >
           <Plus />
           <h1>Add New Menu</h1>
         </div>
@@ -93,76 +129,51 @@ const page = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                <TableRow>
-                  <TableCell className="font-medium flex items-center gap-3 text-xl">
-                    <Image
-                      src={"/images/login-bg.jpg"}
-                      width={40}
-                      height={40}
-                      className="rounded-sm"
-                      alt="items"
-                    />
-                    <h1>Pizza</h1>
-                  </TableCell>
-                  <TableCell>Main Courses</TableCell>
-                  <TableCell>$120</TableCell>
-                  <TableCell>
-                    <Switch className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600" />
-                  </TableCell>
-                  <TableCell className={'flex items-end justify-center gap-3'}>
-                    <Pencil />
-                    <Trash />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium flex items-center gap-3 text-xl">
-                    <Image
-                      src={"/images/login-bg.jpg"}
-                      width={40}
-                      height={40}
-                      className="rounded-sm"
-                      alt="items"
-                    />
-                    <h1>Pizza</h1>
-                  </TableCell>
-                  <TableCell>Main Courses</TableCell>
-                  <TableCell>$120</TableCell>
-                  <TableCell>
-                    <Switch className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600" />
-                  </TableCell>
-                  <TableCell className={'flex items-end justify-center gap-3'}>
-                    <Pencil />
-                    <Trash />
-                  </TableCell>
-                </TableRow>
-                <TableRow>
-                  <TableCell className="font-medium flex items-center gap-3 text-xl">
-                    <Image
-                      src={"/images/login-bg.jpg"}
-                      width={40}
-                      height={40}
-                      className="rounded-sm"
-                      alt="items"
-                    />
-                    <h1>Pizza</h1>
-                  </TableCell>
-                  <TableCell>Main Courses</TableCell>
-                  <TableCell>$120</TableCell>
-                  <TableCell>
-                    <Switch className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600" />
-                  </TableCell>
-                  <TableCell className={'flex items-end justify-center gap-3'}>
-                    <Pencil className="text-blue-700" />
-                    <Trash />
-                  </TableCell>
-                </TableRow>
-                 
+                {itemsInfo
+                  .filter((item) => {
+                    if (isOpen === "All Items") return true;
+                    return item.category === isOpen;
+                  })
+                  .map((item, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium flex items-center gap-3 text-xl">
+                        <Image
+                          src={item.src}
+                          width={40}
+                          height={40}
+                          className="rounded-sm"
+                          alt="items"
+                        />
+                        <h1>{item.name}</h1>
+                      </TableCell>
+                      <TableCell>{item.category}</TableCell>
+                      <TableCell>{item.price}</TableCell>
+                      <TableCell>
+                        <Switch
+                          className="data-[state=checked]:bg-green-500 data-[state=unchecked]:bg-gray-600"
+                          defaultChecked
+                          onCheckedChange={() => handleSwitch(item.name)}
+                        />
+                      </TableCell>
+                      <TableCell
+                        className={"flex items-end justify-center gap-3"}
+                      >
+                        <Pencil />
+                        <Trash />
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </div>
         </div>
       </div>
-    </>
+      {showModal && (
+        <div className="bg-black/5 absolute top-14 right-64">
+          <CreateMenuItems setShowModal={setShowModal}/>
+        </div>
+      )}
+    </div>
   );
 };
 
