@@ -1,7 +1,7 @@
 "use client";
 
 import { Cross, Pencil, Plus, Search, Settings, Trash, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -14,6 +14,7 @@ import {
 import Image from "next/image";
 import { Switch } from "@/components/ui/switch";
 import CreateMenuItems from "@/components/CreateMenuItems";
+import axios from "axios";
 
 const page = () => {
   const categories = [
@@ -24,28 +25,7 @@ const page = () => {
     "Beverages",
     "Drinks",
   ];
-
-  const itemsInfo = [
-    {
-      name: "Pizza",
-      src: "/images/login-bg.jpg",
-      category: "Main Course",
-      price: "$10",
-    },
-    {
-      name: "Burger",
-      src: "/images/table1.jpg",
-      category: "Main Course",
-      price: "$12",
-    },
-    {
-      name: "Mojito",
-      src: "/images/avatar.png",
-      category: "Beverages",
-      price: "$5",
-    },
-  ];
-
+  const [itemsInfo, setItemsInfo] = useState([]);
   const [available, setAvailable] = useState(true);
   const [isOpen, setIsOpen] = useState("All Items");
   const [showModal, setShowModal] = useState(false);
@@ -58,6 +38,22 @@ const page = () => {
   const handleAddMenu = () => {
     setShowModal(true);
   };
+
+  useEffect(() => {
+    try {
+      const fetchItems = async () => {
+        // Fetch menu items from the server or API
+        const res = await axios.get("/api/foodItems");
+        setItemsInfo(res.data);
+      };
+      fetchItems();
+    } catch (e) {
+      console.log(e.message);
+    }
+  }, []);
+
+  
+
   return (
     <div className="relative">
       <div className="w-auto  flex justify-between items-center">
@@ -132,13 +128,13 @@ const page = () => {
                 {itemsInfo
                   .filter((item) => {
                     if (isOpen === "All Items") return true;
-                    return item.category === isOpen;
+                    return item.category?.name === isOpen || item.category === isOpen;
                   })
                   .map((item, index) => (
                     <TableRow key={index}>
                       <TableCell className="font-medium flex items-center gap-3 text-xl">
                         <Image
-                          src={item.src}
+                          src={item.image || null}
                           width={40}
                           height={40}
                           className="rounded-sm"
@@ -146,7 +142,7 @@ const page = () => {
                         />
                         <h1>{item.name}</h1>
                       </TableCell>
-                      <TableCell>{item.category}</TableCell>
+                      <TableCell>{item.category?.name || item.category}</TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>
                         <Switch
@@ -170,7 +166,7 @@ const page = () => {
       </div>
       {showModal && (
         <div className="bg-black/5 absolute top-14 right-64">
-          <CreateMenuItems setShowModal={setShowModal}/>
+          <CreateMenuItems setShowModal={setShowModal} />
         </div>
       )}
     </div>

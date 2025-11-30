@@ -3,29 +3,50 @@ import FoodItem from "@/app/models/foodItemModel";
 import Category from "@/app/models/categoryModel";
 import { NextResponse } from "next/server";
 
-export async function GET(){
-    try{
-        await connectDB()
-        const foodItems = await FoodItem.find();
-        return NextResponse.json(foodItems)
-    }catch(e){
-
-    }
+export async function GET() {
+  try {
+    await connectDB();
+    const foodItems = await FoodItem.find().populate("category");
+    return NextResponse.json(foodItems);
+  } catch (e) {
+    console.error("Error fetching food items:", e);
+    return NextResponse.json(
+      { message: "Failed to fetch food items", error: e.message },
+      { status: 500 }
+    );
+  }
 }
 
 export async function POST(req) {
   try {
     await connectDB();
     const { name, price, category, image } = await req.json();
-    
-    console.log("Received data:", { name, price, category, image });
-    
-    if (!name || !price || !category || !image) {
+
+    // Validate required fields
+    if (!name || !name.trim()) {
       return NextResponse.json(
-        {
-          message: "All fields are required",
-          received: { name: !!name, price: !!price, category: !!category, image: !!image }
-        },
+        { message: "Name is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!price || price <= 0) {
+      return NextResponse.json(
+        { message: "Valid price is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!category || !category.trim()) {
+      return NextResponse.json(
+        { message: "Category is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!image || !image.trim()) {
+      return NextResponse.json(
+        { message: "Image is required" },
         { status: 400 }
       );
     }
@@ -41,14 +62,14 @@ export async function POST(req) {
 
     const existingItem = await FoodItem.findOne({ name });
     if (existingItem) {
-        return NextResponse.json(
-            {
-              message: "Item already exists",
-            },
-            { status: 400 }
-          );
+      return NextResponse.json(
+        {
+          message: "Item already exists",
+        },
+        { status: 400 }
+      );
     }
-    
+
     const newItems = new FoodItem({
       name,
       price,
@@ -64,7 +85,7 @@ export async function POST(req) {
       {
         message: "Failed to create food item",
         error: e.message,
-        stack: process.env.NODE_ENV === 'development' ? e.stack : undefined
+        stack: process.env.NODE_ENV === "development" ? e.stack : undefined,
       },
       { status: 500 }
     );

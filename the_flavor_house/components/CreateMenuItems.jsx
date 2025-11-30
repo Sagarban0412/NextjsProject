@@ -68,6 +68,9 @@ const CreateMenuItems = ({ setShowModal }) => {
       toast.success("Food Item Created Successfully");
     } catch (error) {
       console.error("Error creating food item:", error);
+      console.error("Error response:", error.response?.data);
+      const errorMessage = error.response?.data?.message || "Failed to create food item";
+      toast.error(errorMessage);
     }
   };
 
@@ -149,7 +152,7 @@ const CreateMenuItems = ({ setShowModal }) => {
                       value={field.value || ""}
                       onChange={(e) =>
                         field.onChange(
-                          e.target.value ? Number(e.target.value) : ""
+                          e.target.value ? Number(e.target.value) : 0
                         )
                       }
                     />
