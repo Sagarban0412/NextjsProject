@@ -16,6 +16,8 @@ import { Switch } from "@/components/ui/switch";
 import CreateMenuItems from "@/components/CreateMenuItems";
 import axios from "axios";
 
+import { toast } from "react-toastify";
+
 const page = () => {
   const categories = [
     "All Items",
@@ -29,6 +31,7 @@ const page = () => {
   const [available, setAvailable] = useState(true);
   const [isOpen, setIsOpen] = useState("All Items");
   const [showModal, setShowModal] = useState(false);
+  console.log(itemsInfo);
 
   const handleSwitch = (ItemName) => {
     setAvailable(!available);
@@ -39,20 +42,38 @@ const page = () => {
     setShowModal(true);
   };
 
-  useEffect(() => {
+  const fetchItems = async () => {
     try {
-      const fetchItems = async () => {
-        // Fetch menu items from the server or API
-        const res = await axios.get("/api/foodItems");
-        setItemsInfo(res.data);
-      };
-      fetchItems();
+      const res = await axios.get("/api/foodItems");
+      setItemsInfo(res.data);
     } catch (e) {
       console.log(e.message);
     }
+  };
+
+  useEffect(() => {
+    fetchItems();
   }, []);
 
-  
+  const deleteItems = async (id) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this item?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    try {
+      const res = await axios.delete(`/api/foodItems/${id}`);
+      toast.success("Items Deleted Successfully");
+      // Refresh the items list after deletion
+      const updatedRes = await axios.get("/api/foodItems");
+      setItemsInfo(updatedRes.data);
+    } catch (error) {
+      toast.error(error.message || "Error deleting the items");
+    }
+  };
 
   return (
     <div className="relative">
@@ -128,10 +149,12 @@ const page = () => {
                 {itemsInfo
                   .filter((item) => {
                     if (isOpen === "All Items") return true;
-                    return item.category?.name === isOpen || item.category === isOpen;
+                    return (
+                      item.category?.name === isOpen || item.category === isOpen
+                    );
                   })
-                  .map((item, index) => (
-                    <TableRow key={index}>
+                  .map((item) => (
+                    <TableRow key={item._id}>
                       <TableCell className="font-medium flex items-center gap-3 text-xl">
                         <Image
                           src={item.image || null}
@@ -142,7 +165,9 @@ const page = () => {
                         />
                         <h1>{item.name}</h1>
                       </TableCell>
-                      <TableCell>{item.category?.name || item.category}</TableCell>
+                      <TableCell>
+                        {item.category?.name || item.category}
+                      </TableCell>
                       <TableCell>{item.price}</TableCell>
                       <TableCell>
                         <Switch
@@ -155,7 +180,10 @@ const page = () => {
                         className={"flex items-end justify-center gap-3"}
                       >
                         <Pencil />
-                        <Trash />
+                        <Trash
+                          className="text-red-600 cursor-pointer"
+                          onClick={() => deleteItems(item._id)}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}
@@ -166,7 +194,10 @@ const page = () => {
       </div>
       {showModal && (
         <div className="bg-black/5 absolute top-14 right-64">
-          <CreateMenuItems setShowModal={setShowModal} />
+          <CreateMenuItems
+            setShowModal={setShowModal}
+            onItemCreated={fetchItems}
+          />
         </div>
       )}
     </div>

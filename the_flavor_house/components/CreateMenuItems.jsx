@@ -15,7 +15,7 @@ import { Input } from "./ui/input";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const CreateMenuItems = ({ setShowModal }) => {
+const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
   const [preview, setPreview] = useState("");
   const [category, setCategory] = useState([]);
 
@@ -66,6 +66,11 @@ const CreateMenuItems = ({ setShowModal }) => {
       console.log(postItems.data);
       setShowModal(false);
       toast.success("Food Item Created Successfully");
+      // Refresh parent component data
+      if (onItemCreated) {
+        onItemCreated();
+      }
+      
     } catch (error) {
       console.error("Error creating food item:", error);
       console.error("Error response:", error.response?.data);
