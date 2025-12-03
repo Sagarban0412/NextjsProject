@@ -31,15 +31,12 @@ const page = () => {
   const [available, setAvailable] = useState(true);
   const [isOpen, setIsOpen] = useState("All Items");
   const [showModal, setShowModal] = useState(false);
-  console.log(itemsInfo);
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   const handleSwitch = (ItemName) => {
     setAvailable(!available);
     console.log(ItemName);
-  };
-
-  const handleAddMenu = () => {
-    setShowModal(true);
   };
 
   const fetchItems = async () => {
@@ -73,6 +70,18 @@ const page = () => {
     } catch (error) {
       toast.error(error.message || "Error deleting the items");
     }
+  };
+
+  const updateItems = (item) => {
+    setSelectedItem(item);
+    setIsUpdate(true);
+    setShowModal(true);
+  };
+
+  const handleAddMenu = () => {
+    setShowModal(true);
+    setIsUpdate(false);
+    setSelectedItem(null);
   };
 
   return (
@@ -179,7 +188,12 @@ const page = () => {
                       <TableCell
                         className={"flex items-end justify-center gap-3"}
                       >
-                        <Pencil />
+                        <Pencil
+                          className="text-blue-600 cursor-pointer"
+                          onClick={() => {
+                            updateItems(item);
+                          }}
+                        />
                         <Trash
                           className="text-red-600 cursor-pointer"
                           onClick={() => deleteItems(item._id)}
@@ -197,6 +211,8 @@ const page = () => {
           <CreateMenuItems
             setShowModal={setShowModal}
             onItemCreated={fetchItems}
+            isUpdate={isUpdate}
+            itemData={selectedItem}
           />
         </div>
       )}

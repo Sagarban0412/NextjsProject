@@ -15,7 +15,8 @@ import { Input } from "./ui/input";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
+const CreateMenuItems = ({ setShowModal, onItemCreated, isUpdate, itemData }) => {
+  
   const [preview, setPreview] = useState("");
   const [category, setCategory] = useState([]);
 
@@ -29,10 +30,10 @@ const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      category: "",
-      price: 0,
-      image: "",
+      name: itemData?.name || "",
+      category: itemData?.category?.name || itemData?.category || "",
+      price: itemData?.price || 0,
+      image: itemData?.image || "",
     },
   });
 
@@ -62,19 +63,23 @@ const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
   const onSubmit = async (data) => {
     try {
       console.log("Submitting data:", data);
-      const postItems = await axios.post("/api/foodItems", data);
-      console.log(postItems.data);
+      
+      if (isUpdate) {
+        await axios.put(`/api/foodItems/${itemData._id}`, data);
+        toast.success("Food Item Updated Successfully");
+      } else {
+        await axios.post("/api/foodItems", data);
+        toast.success("Food Item Created Successfully");
+      }
+      
       setShowModal(false);
-      toast.success("Food Item Created Successfully");
-      // Refresh parent component data
       if (onItemCreated) {
         onItemCreated();
       }
       
     } catch (error) {
-      console.error("Error creating food item:", error);
-      console.error("Error response:", error.response?.data);
-      const errorMessage = error.response?.data?.message || "Failed to create food item";
+      console.error("Error:", error);
+      const errorMessage = error.response?.data?.message || `Failed to ${isUpdate ? 'update' : 'create'} food item`;
       toast.error(errorMessage);
     }
   };
@@ -84,19 +89,23 @@ const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
       try {
         const res = await axios.get("/api/category");
         setCategory(res.data);
-        console.log(res.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
       }
     };
     fetchCategory();
- }, []);
+    
+    // Set preview if updating with existing image
+    if (isUpdate && itemData?.image) {
+      setPreview(itemData.image);
+    }
+ }, [isUpdate, itemData]);
  
 
   return (
     <div className="bg-black/90 w-[800px] rounded-2xl">
       <div className="flex items-center justify-between p-5">
-        <h1 className="font-medium text-2xl">Create Menu Items</h1>
+        <h1 className="font-medium text-2xl">{isUpdate ? 'Update' : 'Create'} Menu Items</h1>
         <X onClick={() => setShowModal(false)} size={40} />
       </div>
 
@@ -216,9 +225,8 @@ const CreateMenuItems = ({ setShowModal, onItemCreated }) => {
             <button
               type="submit"
               className="mt-6 bg-green-600 px-6 py-2 rounded-xl"
-
             >
-              Submit
+              {isUpdate ? 'Update' : 'Create'}
             </button>
           </form>
         </Form>
