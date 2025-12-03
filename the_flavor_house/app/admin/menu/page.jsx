@@ -139,7 +139,7 @@ const page = () => {
           <div>
             <Table className={"border"}>
               <TableHeader>
-                <TableRow className={"py-2"}>
+                <TableRow className={"py-2 bg-zinc-600"}>
                   <TableHead className={"text-white font-medium text-xl"}>
                     Items
                   </TableHead>
