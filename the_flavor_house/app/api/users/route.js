@@ -2,13 +2,16 @@
 import connectDB from "@/app/libs/db";
 import { NextResponse } from "next/server";
 import { createUser } from "@/app/controllers/userController"; // adjust path to where you put createUser
+import bcrypt from "bcryptjs";
 
 export async function POST(request) {
   try {
     await connectDB();
 
     const body = await request.json();
-    const { userName, password, role } = body ?? {};
+    // console.log("Received Data from frontend:",body);
+    
+    const { userName, email,password, role } = body ?? {};
 
     // Basic validation
     if (!userName || !password) {
@@ -19,7 +22,7 @@ export async function POST(request) {
     }
 
     // Create user (createUser throws on conflict)
-    const user = await createUser(userName.trim(), password, role ?? "user");
+    const user = await createUser(userName.trim(),email, password, role ?? "user");
 
     return NextResponse.json(
       { message: "User created successfully", user },

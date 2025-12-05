@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { email } from "zod";
 
 const userSchema = mongoose.Schema({
   userName: {
@@ -9,9 +10,14 @@ const userSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  email:{
+    type:String,
+    required:true,
+    unique:true
+  },
   role: {
     type: String,
-    enum: ["admin", "waiter"],
+    enum: ["admin", "waiter","manager"],
     default: "waiter",
   },
 });

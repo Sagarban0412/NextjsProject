@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
  * Throws an Error with status=409 if user already exists.
  * Returns the created user object without the password.
  */
-export const createUser = async (userName, password, role = "user") => {
+export const createUser = async (userName,email, password, role = "user") => {
   try {
     // Check if user exists
     const existing = await User.findOne({ userName });
@@ -24,6 +24,7 @@ export const createUser = async (userName, password, role = "user") => {
     // Create and save
     const user = new User({
       userName,
+      email,
       password: hashed,
       role,
     });

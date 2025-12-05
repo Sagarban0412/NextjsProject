@@ -12,25 +12,42 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-const page = () => {
+const Page = () => {
   const [showModal, setShowModal] = useState(false);
   const handleAddStaff = () => {
     setShowModal(true);
   };
 
   const [form, setForm] = useState({
-    name: "",
+    userName: "",
     email: "",
     role: "",
     password: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", form);
-    setShowModal(false)
+    try {
+      console.log("Form submitted:", form);
+      const createUser = await axios.post("/api/users", form);
+      console.log(createUser);
+      toast.success("user created successfully!!");
+      setForm({
+        userName: "",
+        email: "",
+        role: "",
+        password: "",
+      });
+      setShowModal(false);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      const errorMessage =
+        error.response?.data?.error;
+      toast.error(errorMessage);
+    }
   };
   return (
     <div className="relative">
@@ -131,11 +148,11 @@ const page = () => {
               <label htmlFor="name">Name</label>
               <input
                 type="text"
-                id="name"
+                id="userName"
                 className="border rounded-md p-2"
                 placeholder="Enter the Username"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                value={form.userName}
+                onChange={(e) => setForm({ ...form, userName: e.target.value })}
               />
             </div>
             <div className="flex flex-col gap-2">
@@ -154,7 +171,7 @@ const page = () => {
               <select
                 id="role"
                 className="border rounded-md p-2 bg-black"
-                value={form.role}
+                // value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
               >
                 <option value="admin">Admin</option>
@@ -188,4 +205,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
