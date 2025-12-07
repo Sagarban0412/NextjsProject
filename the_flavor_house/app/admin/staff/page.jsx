@@ -1,7 +1,7 @@
 "use client";
 
 import { Pencil, Plus, Search, Trash, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   Table,
@@ -17,6 +17,7 @@ import { toast } from "react-toastify";
 
 const Page = () => {
   const [showModal, setShowModal] = useState(false);
+  const [users, setUsers] = useState([]);
   const handleAddStaff = () => {
     setShowModal(true);
   };
@@ -42,13 +43,38 @@ const Page = () => {
         password: "",
       });
       setShowModal(false);
+      fetchUsers(); // Refresh the staff list
     } catch (error) {
       console.error("Error creating user:", error);
-      const errorMessage =
-        error.response?.data?.error;
+      const errorMessage = error.response?.data?.error;
       toast.error(errorMessage);
     }
   };
+
+  const fetchUsers = async () => {
+    const res = await axios.get("/api/users");
+    setUsers(res.data);
+    console.log(res.data);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const handleDelete = async (id) => {
+    try {
+      const deleteUser = window.confirm("want to delte the This user");
+      if (!deleteUser) return;
+
+      await axios.delete(`/api/users/${id}`);
+      toast.success("User deleted successfully!!");
+      fetchUsers(); // Refresh the staff list
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      const errorMessage = error.response?.data?.error;
+      toast.error(errorMessage);
+    }
+  };
+
   return (
     <div className="relative">
       <div>
@@ -107,27 +133,40 @@ const Page = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell className="font-medium flex items-center gap-2">
-                <img
-                  src="/images/avatar.png"
-                  alt="avatar"
-                  className="w-10 h-10 rounded-full"
-                />
-                <div>
-                  <h1 className="font-bold text-sm">Sagar Ban</h1>
-                  <p className="font-light text-sm text-gray-300">
-                    Sagarban2021@gmail.com
-                  </p>
-                </div>
-              </TableCell>
-              <TableCell>Admin</TableCell>
-              <TableCell>2025/12/03</TableCell>
-              <TableCell className="text-right flex gap-5 items-end">
-                <Pencil className="text-blue-600 cursor-pointer" />
-                <Trash className="text-red-600 cursor-pointer" />
-              </TableCell>
-            </TableRow>
+            {users.length > 0 ? (
+              users.map((user) => (
+                <TableRow key={user._id}>
+                  <TableCell className="font-medium flex items-center gap-2">
+                    <img
+                      src="/images/avatar.png"
+                      alt="avatar"
+                      className="w-10 h-10 rounded-full"
+                    />
+                    <div>
+                      <h1 className="font-bold text-sm">{user.userName}</h1>
+                      <p className="font-light text-sm text-gray-300">
+                        {user.email}
+                      </p>
+                    </div>
+                  </TableCell>
+                  <TableCell>{user.role}</TableCell>
+                  <TableCell>2025/12/03</TableCell>
+                  <TableCell className="text-right flex gap-5 items-end">
+                    <Pencil className="text-blue-600 cursor-pointer" />
+                    <Trash
+                      className="text-red-600 cursor-pointer"
+                      onClick={() => handleDelete(user._id)}
+                    />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center">
+                  No staff found.
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
       </div>
@@ -174,6 +213,7 @@ const Page = () => {
                 // value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
               >
+                <option value="">Select User Role</option>
                 <option value="admin">Admin</option>
                 <option value="manager">Manager</option>
                 <option value="waiter">Waiter</option>

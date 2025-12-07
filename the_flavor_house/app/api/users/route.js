@@ -3,6 +3,7 @@ import connectDB from "@/app/libs/db";
 import { NextResponse } from "next/server";
 import { createUser } from "@/app/controllers/userController"; // adjust path to where you put createUser
 import bcrypt from "bcryptjs";
+import User from "@/app/models/userModel";
 
 export async function POST(request) {
   try {
@@ -33,5 +34,19 @@ export async function POST(request) {
     const status = error?.status ?? 500;
     console.error("POST /api/users error:", error?.message ?? error);
     return NextResponse.json({ error: error?.message ?? "Internal server error" }, { status });
+  }
+}
+
+export async function GET(request){
+  try {
+    await connectDB();
+    const users = await User.find();
+    return NextResponse.json(users, { status: 200 });
+  } catch (error) {
+    console.error("GET /api/users error:", error);
+    return NextResponse.json(
+      { error: error?.message ?? "Failed to fetch users" },
+      { status: 500 }
+    );
   }
 }
