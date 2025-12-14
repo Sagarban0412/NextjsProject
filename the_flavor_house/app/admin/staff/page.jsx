@@ -18,8 +18,19 @@ import { toast } from "react-toastify";
 const Page = () => {
   const [showModal, setShowModal] = useState(false);
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [isUpdate, setIsUpdate] = useState(false);
+
   const handleAddStaff = () => {
     setShowModal(true);
+    setIsUpdate(false);
+    setSelectedUser(null);
+    setForm({
+      userName: "",
+      email: "",
+      role: "",
+      password: "",
+    });
   };
 
   const [form, setForm] = useState({
@@ -32,10 +43,14 @@ const Page = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("Form submitted:", form);
-      const createUser = await axios.post("/api/users", form);
-      console.log(createUser);
-      toast.success("user created successfully!!");
+      if (isUpdate) {
+        await axios.put(`/api/users/${selectedUser._id}`, form);
+        toast.success("User updated successfully!");
+      } else {
+        await axios.post("/api/users", form);
+        toast.success("User created successfully!");
+      }
+      
       setForm({
         userName: "",
         email: "",
@@ -43,9 +58,11 @@ const Page = () => {
         password: "",
       });
       setShowModal(false);
-      fetchUsers(); // Refresh the staff list
+      setIsUpdate(false);
+      setSelectedUser(null);
+      fetchUsers();
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error("Error:", error);
       const errorMessage = error.response?.data?.error;
       toast.error(errorMessage);
     }
@@ -75,6 +92,17 @@ const Page = () => {
     }
   };
 
+  const handleUpdate = (user) => {
+    setShowModal(true);
+    setSelectedUser(user);
+    setForm({
+      userName: user.userName,
+      email: user.email,
+      role: user.role,
+      password: "",
+    });
+    setIsUpdate(true);
+  };
   return (
     <div className="relative">
       <div>
@@ -152,7 +180,9 @@ const Page = () => {
                   <TableCell>{user.role}</TableCell>
                   <TableCell>2025/12/03</TableCell>
                   <TableCell className="text-right flex gap-5 items-end">
-                    <Pencil className="text-blue-600 cursor-pointer" />
+                    <Pencil className="text-blue-600 cursor-pointer"
+                      onClick={()=>handleUpdate(user)}
+                    />
                     <Trash
                       className="text-red-600 cursor-pointer"
                       onClick={() => handleDelete(user._id)}
@@ -175,11 +205,15 @@ const Page = () => {
         <div className="w-[800px] h-[700px] bg-black/90 absolute top-28 right-[400px] rounded-3xl p-4 ">
           {/* Modal content for adding/updating staff would go here */}
           <div className="flex justify-between items-center mb-3">
-            <h1 className="font-bold text-xl">Create new User</h1>
+            <h1 className="font-bold text-xl">{isUpdate ?"Update user":"Create new User"}</h1>
             <X
               size={40}
               className="cursor-pointer"
-              onClick={() => setShowModal(false)}
+              onClick={() => {
+                setShowModal(false);
+                setIsUpdate(false);
+                setSelectedUser(null);
+              }}
             />
           </div>
           <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -210,7 +244,7 @@ const Page = () => {
               <select
                 id="role"
                 className="border rounded-md p-2 bg-black"
-                // value={form.role}
+                value={form.role}
                 onChange={(e) => setForm({ ...form, role: e.target.value })}
               >
                 <option value="">Select User Role</option>
@@ -235,7 +269,7 @@ const Page = () => {
                 type="submit"
                 className="bg-blue-500 text-white px-4 py-2 rounded-md"
               >
-                Create
+                {isUpdate ? "Update" : "Create"}
               </button>
             </div>
           </form>
