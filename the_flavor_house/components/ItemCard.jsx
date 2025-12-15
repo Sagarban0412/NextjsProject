@@ -19,7 +19,7 @@ const ItemCard = () => {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
       {foodItems.map((item) => (
         <div
           key={item._id}
@@ -34,7 +34,7 @@ const ItemCard = () => {
           />
           
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20" />
+          <div className="absolute inset-0 from-black/80 via-transparent to-black/20" />
           
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
@@ -44,16 +44,16 @@ const ItemCard = () => {
           </div>
           
           {/* Content */}
-          <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
-            <div className="space-y-2">
-              <h3 className="font-bold text-lg leading-tight line-clamp-2">
+          <div className="absolute bottom-0 left-0 right-0 p-4 text-white bg-black/50">
+            <div className="space-y-2 ">
+              <h3 className="font-bold text-lg leading-tight line-clamp-1 ">
                 {item.name}
               </h3>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-bold text-green-400">
-                  ₹{item.price}
+                <span className="text-sm font-bold text-green-400">
+                  Rs.{item.price}
                 </span>
-                <button className="bg-white text-black px-4 py-2 rounded-full text-sm font-semibold hover:bg-gray-100 transition-colors">
+                <button className="bg-white cursor-pointer text-black px-4 py-2 rounded-full text-[10px] font-semibold hover:bg-gray-100 transition-colors">
                   Add
                 </button>
               </div>
