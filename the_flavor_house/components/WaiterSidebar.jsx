@@ -39,7 +39,7 @@ const WaiterSidebar = () => {
   ];
   return (
     <>
-      <div className="px-6 py-5 flex flex-col justify-between h-screen">
+      <div className="px-6 py-5 flex flex-col justify-between h-screen fixed left-0 top-0 bg-zinc-700 w-64 z-50 shadow-lg">
         <div className="flex-1">
           <div className="flex gap-3 items-center">
             <img src="/images/avatar.png" className="w-10 h-10 rounded-full" alt="avatar" />
@@ -68,7 +68,7 @@ const WaiterSidebar = () => {
             ))}
           </div>
         </div>
-        <div className="flex gap-4 cursor-pointer">
+        <div className="flex gap-4 cursor-pointer hover:bg-gray-600 p-2 rounded-lg transition-colors">
             <LogOut  size={30}/>
             <h1>Logout</h1>
         </div>

@@ -1,16 +1,12 @@
 import React from "react";
 import WaiterSidebar from "@/components/WaiterSidebar";
 
-export default function  WaiterLayout ({ children }) {
+export default function WaiterLayout({ children }) {
   return (
-    <div>
-      <div className="bg-black/90 text-white flex ">
-        <div className="bg-zinc-700 w-[20%] h-screen shadow-2xl hidden md:flex">
-          <WaiterSidebar />
-        </div>
-        <div className="w-screen p-8">
-          <div>{children}</div>
-        </div>
+    <div className="bg-black/90 text-white min-h-screen">
+      <WaiterSidebar />
+      <div className="ml-64 min-h-screen">
+        {children}
       </div>
     </div>
   );
